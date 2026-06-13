@@ -3,6 +3,10 @@
 
 #include <string>
 
+/**
+ * @brief Model reprezentujący pojedynczą rezerwację wizyty pacjenta u lekarza.
+ */
+
 class Appointment {
 public:
     Appointment(int id, int patientId, int doctorId, const std::string& dateTime);
@@ -11,6 +15,9 @@ public:
     int getPatientId() const;
     int getDoctorId() const;
     std::string getDateTime() const;
+    /**
+     * @brief Aktualizuje termin wizyty (wykorzystywane przy zmianie daty rezerwacji).
+     */
     void setDateTime(const std::string& dateTime);
 
 private:
