@@ -1,5 +1,10 @@
 #include "User.h"
 
+/**
+ * @brief Konstruktor klasy bazowej User.
+ * Inicjalizuje podstawowe dane użytkownika systemu (wspólne dla lekarzy i recepcji).
+ */
+
 User::User(int id,
     const std::string& login,
     const std::string& password,
@@ -38,7 +43,9 @@ std::string User::getLastName() const
 {
     return lastName_;
 }
-
+/**
+ * @brief Zwraca pełne imię i nazwisko w jednym ciągu znaków.
+ */
 std::string User::getFullName() const
 {
     return firstName_ + " " + lastName_;
