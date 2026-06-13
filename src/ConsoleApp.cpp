@@ -5,18 +5,32 @@
 #include <limits>
 
 namespace {
-    constexpr int kWidth = 96;
+    constexpr int kWidth = 96; /**< Stała szerokość linii separatorów w konsoli. */
 
+    /**
+     * @brief Generuje linię tekstową o określonej szerokości pełniącą rolę separatora.
+     * @param character Znak, z którego ma zostać zbudowana linia (domyślnie '-').
+     * @return std::string Ciąg znaków tworzący linię.
+     */
     std::string line(char character = '-')
     {
         return std::string(kWidth, character);
     }
 }
 
+/**
+ * @brief Konstruktor klasy ConsoleApp.
+ * @param clinicSystem Referencja do głównego obiektu logiki biznesowej systemu przychodni.
+ */
 ConsoleApp::ConsoleApp(ClinicSystem& clinicSystem)
     : clinicSystem_(clinicSystem)
 {}
 
+/**
+ * @brief Główna pętla uruchomieniowa aplikacji konsolowej.
+ * @details Steruje procesem logowania oraz kierowaniem użytkowników do odpowiednich paneli
+ * (recepcjonisty lub lekarza) na podstawie przypisanej roli.
+ */
 void ConsoleApp::run()
 {
     bool running = true;
@@ -34,6 +48,10 @@ void ConsoleApp::run()
     }
 }
 
+/**
+ * @brief Ekran logowania użytkownika do systemu.
+ * @details Pobiera dane logowania i weryfikuje je w systemie. Wpisanie '0' przerywa działanie.
+ */
 void ConsoleApp::loginScreen()
 {
     currentUser_.reset();
@@ -61,6 +79,10 @@ void ConsoleApp::loginScreen()
     }
 }
 
+/**
+ * @brief Wyświetla i obsługuje menu dla pracowników recepcji.
+ * @details Zawiera opcje rejestracji pacjentów, zarządzania wizytami oraz wglądu w harmonogramy.
+ */
 void ConsoleApp::receptionistMenu()
 {
     bool loggedIn = true;
@@ -110,6 +132,10 @@ void ConsoleApp::receptionistMenu()
     }
 }
 
+/**
+ * @brief Wyświetla i obsługuje menu dla lekarzy.
+ * @details Udostępnia funkcje przeglądania własnego terminarza oraz zarządzania dokumentacją medyczną.
+ */
 void ConsoleApp::doctorMenu()
 {
     bool loggedIn = true;
@@ -147,6 +173,9 @@ void ConsoleApp::doctorMenu()
     }
 }
 
+/**
+ * @brief Formularz konsolowy do rejestracji nowego pacjenta w systemie.
+ */
 void ConsoleApp::registerPatient()
 {
     clearScreen();
@@ -166,6 +195,9 @@ void ConsoleApp::registerPatient()
     printMessage("Dodano pacjenta. ID pacjenta: " + std::to_string(patientId));
 }
 
+/**
+ * @brief Ekran wyszukiwania pacjentów na podstawie numeru PESEL lub nazwiska.
+ */
 void ConsoleApp::searchPatient()
 {
     clearScreen();
@@ -196,6 +228,9 @@ void ConsoleApp::searchPatient()
     waitForEnter();
 }
 
+/**
+ * @brief Obsługuje proces dodawania i rezerwacji nowej wizyty lekarskiej.
+ */
 void ConsoleApp::addAppointment()
 {
     clearScreen();
@@ -216,6 +251,9 @@ void ConsoleApp::addAppointment()
     printMessage("Dodano wizyte. ID wizyty: " + std::to_string(appointmentId));
 }
 
+/**
+ * @brief Obsługuje odwoływanie (usuwanie) wizyty z systemu po podaniu jej ID.
+ */
 void ConsoleApp::removeAppointment()
 {
     clearScreen();
@@ -237,6 +275,9 @@ void ConsoleApp::removeAppointment()
     printMessage("Usunieto wizyte.");
 }
 
+/**
+ * @brief Przeorganizowuje termin istniejącej wizyty na nową datę.
+ */
 void ConsoleApp::changeAppointmentDate()
 {
     clearScreen();
@@ -253,6 +294,9 @@ void ConsoleApp::changeAppointmentDate()
     printMessage("Nie zmieniono terminu. Wizyta nie istnieje albo lekarz ma juz wizyte w tym terminie.");
 }
 
+/**
+ * @brief Wyświetla zbiorczy harmonogram wszystkich lekarzy zarejestrowanych w systemie.
+ */
 void ConsoleApp::showAllDoctorsSchedule()
 {
     clearScreen();
@@ -265,6 +309,9 @@ void ConsoleApp::showAllDoctorsSchedule()
     waitForEnter();
 }
 
+/**
+ * @brief Wyświetla harmonogram zaplanowanych wizyt dla aktualnie zalogowanego lekarza.
+ */
 void ConsoleApp::showOwnSchedule()
 {
     clearScreen();
@@ -273,6 +320,9 @@ void ConsoleApp::showOwnSchedule()
     waitForEnter();
 }
 
+/**
+ * @brief Prezentuje listę wszystkich wizyt powiązanych z wybranym pacjentem.
+ */
 void ConsoleApp::showPatientAppointments()
 {
     clearScreen();
@@ -289,6 +339,9 @@ void ConsoleApp::showPatientAppointments()
     waitForEnter();
 }
 
+/**
+ * @brief Prezentuje całą historię kartotek medycznych ( MedicalRecord ) danego pacjenta.
+ */
 void ConsoleApp::showPatientMedicalRecords()
 {
     clearScreen();
@@ -305,6 +358,9 @@ void ConsoleApp::showPatientMedicalRecords()
     waitForEnter();
 }
 
+/**
+ * @brief Formularz dodawania nowego wpisu do dokumentacji medycznej pacjenta przez lekarza.
+ */
 void ConsoleApp::createMedicalRecord()
 {
     clearScreen();
@@ -332,6 +388,10 @@ void ConsoleApp::createMedicalRecord()
     printMessage("Utworzono wpis dokumentacji. ID wpisu: " + std::to_string(recordId));
 }
 
+/**
+ * @brief Rysuje sformatowany nagłówek sekcji w konsoli otoczony separatorami.
+ * @param title Tekst tytułowy nagłówka.
+ */
 void ConsoleApp::printHeader(const std::string& title) const
 {
     std::cout << line('=') << "\n"
@@ -339,6 +399,11 @@ void ConsoleApp::printHeader(const std::string& title) const
         << line('=') << "\n";
 }
 
+/**
+ * @brief Wyświetla pełne menu wyboru wraz z nagłówkiem i opcjami numerycznymi.
+ * @param title Tytuł menu.
+ * @param options Wektor zawierający tekstowe opcje menu do wyświetlenia.
+ */
 void ConsoleApp::printMenu(const std::string& title, const std::vector<std::string>& options) const
 {
     printHeader(title);
@@ -347,6 +412,10 @@ void ConsoleApp::printMenu(const std::string& title, const std::vector<std::stri
     }
 }
 
+/**
+ * @brief Drukuje tabelę z listą pacjentów i ich podstawowymi danymi.
+ * @param patients Lista pacjentów do wyświetlenia w konsoli.
+ */
 void ConsoleApp::printPatients(const std::vector<Patient>& patients) const
 {
     std::cout << "\nPacjenci\n" << line() << "\n";
@@ -371,6 +440,10 @@ void ConsoleApp::printPatients(const std::vector<Patient>& patients) const
     }
 }
 
+/**
+ * @brief Drukuje tabelę z listą lekarzy i ich specjalizacjami.
+ * @param doctors Lista lekarzy do wyświetlenia.
+ */
 void ConsoleApp::printDoctors(const std::vector<Doctor>& doctors) const
 {
     std::cout << "\nLekarze\n" << line() << "\n";
@@ -388,6 +461,10 @@ void ConsoleApp::printDoctors(const std::vector<Doctor>& doctors) const
     }
 }
 
+/**
+ * @brief Drukuje sformatowaną tabelę zaplanowanych wizyt, uzupełniając dane lekarza i pacjenta.
+ * @param appointments Lista strukturalna wizyt do wylistowania.
+ */
 void ConsoleApp::printAppointments(const std::vector<Appointment>& appointments) const
 {
     std::cout << "\nWizyty\n" << line() << "\n";
@@ -414,6 +491,10 @@ void ConsoleApp::printAppointments(const std::vector<Appointment>& appointments)
     }
 }
 
+/**
+ * @brief Drukuje szczegółowo historię wpisów medycznych.
+ * @param records Wektor zawierający obiekty typu MedicalRecord.
+ */
 void ConsoleApp::printMedicalRecords(const std::vector<MedicalRecord>& records) const
 {
     std::cout << "\nDokumentacja\n" << line() << "\n";
@@ -434,6 +515,10 @@ void ConsoleApp::printMedicalRecords(const std::vector<MedicalRecord>& records) 
     }
 }
 
+/**
+ * @brief Wyświetla powiadomienie użytkownikowi i oczekuje na zatwierdzenie klawiszem Enter.
+ * @param message Treść komunikatu do wyświetlenia.
+ */
 void ConsoleApp::printMessage(const std::string& message) const
 {
     std::cout << "\n" << line() << "\n"
@@ -442,6 +527,11 @@ void ConsoleApp::printMessage(const std::string& message) const
     waitForEnter();
 }
 
+/**
+ * @brief Pobiera liczbę całkowitą ze strumienia wejściowego, obsługując błędy formatu.
+ * @param prompt Komunikat zachęty wyświetlany przed pobraniem danych.
+ * @return int Wczytana poprawna wartość liczbowa.
+ */
 int ConsoleApp::readInt(const std::string& prompt) const
 {
     int value{};
@@ -458,6 +548,12 @@ int ConsoleApp::readInt(const std::string& prompt) const
     }
 }
 
+/**
+ * @brief Pobiera i waliduje wybraną opcję numeryczną z określonego przedziału.
+ * @param minValue Dolna granica dopuszczalnego wyboru (włącznie).
+ * @param maxValue Górna granica dopuszczalnego wyboru (włącznie).
+ * @return int Wybrana poprawna opcja menu.
+ */
 int ConsoleApp::readMenuOption(int minValue, int maxValue) const
 {
     while (true) {
@@ -469,6 +565,11 @@ int ConsoleApp::readMenuOption(int minValue, int maxValue) const
     }
 }
 
+/**
+ * @brief Wczytuje całą linię tekstu podaną przez użytkownika (może być pusta).
+ * @param prompt Tekst zachęty wyświetlany przed wpisaniem tekstu.
+ * @return std::string Wczytany ciąg znaków.
+ */
 std::string ConsoleApp::readLine(const std::string& prompt) const
 {
     std::string value;
@@ -477,6 +578,11 @@ std::string ConsoleApp::readLine(const std::string& prompt) const
     return value;
 }
 
+/**
+ * @brief Wczytuje linię tekstu i wymusza, by nie była ona pusta.
+ * @param prompt Tekst zachęty dla użytkownika.
+ * @return std::string Wczytany niepusty ciąg znaków.
+ */
 std::string ConsoleApp::readRequiredLine(const std::string& prompt) const
 {
     while (true) {
@@ -488,6 +594,12 @@ std::string ConsoleApp::readRequiredLine(const std::string& prompt) const
     }
 }
 
+/**
+ * @brief Obsługuje monity decyzyjne tak/nie (t/n).
+ * @param prompt Pytanie, na które użytkownik musi odpowiedzieć.
+ * @return true Jeśli wybrano odpowiedź twierdzącą (t/T).
+ * @return false Jeśli wybrano odpowiedź przeczącą (n/N).
+ */
 bool ConsoleApp::confirm(const std::string& prompt) const
 {
     while (true) {
@@ -502,11 +614,17 @@ bool ConsoleApp::confirm(const std::string& prompt) const
     }
 }
 
+/**
+ * @brief Czyści ekran konsoli za pomocą sekwencji ucieczki ANSI.
+ */
 void ConsoleApp::clearScreen() const
 {
     std::cout << "\033[2J\033[H";
 }
 
+/**
+ * @brief Wstrzymuje wykonywanie programu do momentu naciśnięcia klawisza Enter.
+ */
 void ConsoleApp::waitForEnter() const
 {
     std::cout << "\nNacisnij Enter, aby kontynuowac...";
