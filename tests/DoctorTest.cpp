@@ -24,21 +24,17 @@ private:
     int failed_{ 0 };
 };
 
-void testCreatingMedicalRecord(TestRunner& runner)
+void testDoctorDoubleBookingBlock(TestRunner& runner)
 {
     ClinicSystem system;
-    const int patientId = system.registerPatient("Jan", "Dokument", "87010112345", "444");
+    const int firstPatientId = system.registerPatient("Ala", "Pierwsza", "84010112345", "111");
+    const int secondPatientId = system.registerPatient("Ola", "Druga", "85010112345", "222");
 
-    const int recordId = system.createMedicalRecord(patientId,
-        101,
-        "2026-06-23",
-        "Grypa",
-        "Odpoczynek",
-        "Paracetamol");
+    const int firstAppointmentId = system.addAppointment(firstPatientId, 101, "2026-06-21 09:00");
+    const int secondAppointmentId = system.addAppointment(secondPatientId, 101, "2026-06-21 09:00");
 
-    runner.assertTrue(recordId > 0, "tworzenie dokumentacji medycznej");
-    runner.assertTrue(system.getMedicalRecordsByPatient(patientId).size() == 1,
-        "pobranie dokumentacji medycznej pacjenta");
+    runner.assertTrue(firstAppointmentId > 0, "pierwsza wizyta lekarza w terminie");
+    runner.assertTrue(secondAppointmentId == -1, "blokada podwojnej wizyty u lekarza");
 }
 
 int main() {
