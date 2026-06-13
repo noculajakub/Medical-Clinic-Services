@@ -24,6 +24,11 @@ private:
     int failed_{ 0 };
 };
 
+void testLogin(TestRunner& runner) {
+    ClinicSystem system;
+    runner.assertTrue(system.login("recepcja", "recepcja123") != nullptr, "logowanie poprawnymi danymi");
+    runner.assertTrue(system.login("recepcja", "bledne") == nullptr, "odrzucenie blednego hasla");
+}
 
 void testAddingAppointment(TestRunner& runner) {
     ClinicSystem system;
@@ -47,6 +52,7 @@ void testChangingAppointmentDate(TestRunner& runner) {
 
 int main() {
     TestRunner runner;
+    testLogin(runner);
     testAddingAppointment(runner);
     testChangingAppointmentDate(runner);
 
